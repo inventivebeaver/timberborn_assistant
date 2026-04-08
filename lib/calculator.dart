@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class Calculator extends ChangeNotifier {
   int _population = 0;
+  int _workingHours = 16;
 
   Map<String, bool> selectedFoodItems = {
     'isCarrotChecked': false,
@@ -29,6 +30,11 @@ class Calculator extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setWorkingHours(int value) {
+    _workingHours = value;
+    notifyListeners();
+  }
+
   void selectFoodItem(String key, bool value) {
     selectedFoodItems[key] = value;
     notifyListeners();
@@ -42,6 +48,9 @@ class Calculator extends ChangeNotifier {
   double get foodConsumption => (_population * 2.67);
 
   double get waterConsumption => (_population * 2.13);
+
+  double get nrOfWaterPumps => (waterConsumption / _workingHours / 3);
+  double get nrOfLargeWaterPumps => (waterConsumption / _workingHours / 15);
 
   int get nrOfSelectedFoodItems =>
       selectedFoodItems.values.where((value) => value == true).length;

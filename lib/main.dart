@@ -27,7 +27,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Timberborn Assistant')),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -61,6 +61,30 @@ class HomePage extends StatelessWidget {
                             context,
                             listen: false,
                           ).setPopulation(0);
+                        }
+                      },
+                    ),
+                  ),
+                  SizedBox(width: 16),
+                  SizedBox(
+                    width: 200,
+                    child: TextField(
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Working hours',
+                      ),
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      onChanged: (value) {
+                        if (value.isNotEmpty) {
+                          Provider.of<Calculator>(
+                            context,
+                            listen: false,
+                          ).setWorkingHours(int.parse(value));
+                        } else {
+                          Provider.of<Calculator>(
+                            context,
+                            listen: false,
+                          ).setWorkingHours(0);
                         }
                       },
                     ),
@@ -100,352 +124,403 @@ class HomePage extends StatelessWidget {
                           ),
                         ],
                       ),
+                      SizedBox(height: 64),
+                      Text('Water production'),
+                      DataTable(
+                        columns: [
+                          DataColumn(label: Text('Building')),
+                          DataColumn(label: Text('Number')),
+                        ],
+                        rows: [
+                          DataRow(
+                            cells: [
+                              DataCell(Text('Water pump')),
+                              DataCell(
+                                Text(
+                                  Provider.of<Calculator>(
+                                    context,
+                                  ).nrOfWaterPumps.toString(),
+                                ),
+                              ),
+                            ],
+                          ),
+                          DataRow(
+                            cells: [
+                              DataCell(Text('Large Waterpump')),
+                              DataCell(
+                                Text(
+                                  Provider.of<Calculator>(
+                                    context,
+                                  ).nrOfLargeWaterPumps.toString(),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ],
                   ),
-                  SizedBox(width: 128,),
-                  DataTable(
-                    columns: <DataColumn>[
-                      DataColumn(label: Text('Selected')),
-                      DataColumn(label: Text('Beehive')),
-                      DataColumn(label: Text('Food Item')),
-                      DataColumn(label: Text('Tiles')),
-                    ],
-                    rows: <DataRow>[
-                      DataRow(
-                        cells: <DataCell>[
-                          DataCell(
-                            Checkbox(
-                              value: Provider.of<Calculator>(
-                                context,
-                              ).selectedFoodItems['isCarrotChecked'],
-                              onChanged: (value) {
-                                Provider.of<Calculator>(
-                                  context,
-                                  listen: false,
-                                ).selectFoodItem('isCarrotChecked', value!);
-                              },
-                            ),
-                          ),
-                          DataCell(
-                            Checkbox(
-                              value: Provider.of<Calculator>(
-                                context,
-                              ).beehiveBuffApplied['isCarrotChecked'],
-                              onChanged: (value) {
-                                Provider.of<Calculator>(
-                                  context,
-                                  listen: false,
-                                ).applyBeehiveBuff('isCarrotChecked', value!);
-                              },
-                            ),
-                          ),
-                          DataCell(Text('Carrot')),
-                          DataCell(
-                            Text(
-                              Provider.of<Calculator>(
-                                context,
-                              ).nrCarrotTiles.toString(),
-                            ),
-                          ),
+                  SizedBox(width: 128),
+                  Column(
+                    children: [
+                      Text('Food production'),
+                      DataTable(
+                        columns: <DataColumn>[
+                          DataColumn(label: Text('Selected')),
+                          DataColumn(label: Text('Beehive')),
+                          DataColumn(label: Text('Food Item')),
+                          DataColumn(label: Text('Tiles')),
                         ],
-                      ),
-                      DataRow(
-                        cells: <DataCell>[
-                          DataCell(
-                            Checkbox(
-                              value: Provider.of<Calculator>(
-                                context,
-                              ).selectedFoodItems['isSunFlowerSeedChecked'],
-                              onChanged: (value) {
-                                Provider.of<Calculator>(
-                                  context,
-                                  listen: false,
-                                ).selectFoodItem('isSunFlowerSeedChecked', value!);
-                              },
-                            ),
+                        rows: <DataRow>[
+                          DataRow(
+                            cells: <DataCell>[
+                              DataCell(
+                                Checkbox(
+                                  value: Provider.of<Calculator>(
+                                    context,
+                                  ).selectedFoodItems['isCarrotChecked'],
+                                  onChanged: (value) {
+                                    Provider.of<Calculator>(
+                                      context,
+                                      listen: false,
+                                    ).selectFoodItem('isCarrotChecked', value!);
+                                  },
+                                ),
+                              ),
+                              DataCell(
+                                Checkbox(
+                                  value: Provider.of<Calculator>(
+                                    context,
+                                  ).beehiveBuffApplied['isCarrotChecked'],
+                                  onChanged: (value) {
+                                    Provider.of<Calculator>(
+                                      context,
+                                      listen: false,
+                                    ).applyBeehiveBuff(
+                                      'isCarrotChecked',
+                                      value!,
+                                    );
+                                  },
+                                ),
+                              ),
+                              DataCell(Text('Carrot')),
+                              DataCell(
+                                Text(
+                                  Provider.of<Calculator>(
+                                    context,
+                                  ).nrCarrotTiles.toString(),
+                                ),
+                              ),
+                            ],
                           ),
-                          DataCell(
-                            Checkbox(
-                              value: Provider.of<Calculator>(
-                                context,
-                              ).beehiveBuffApplied['isSunFlowerSeedChecked'],
-                              onChanged: (value) {
-                                Provider.of<Calculator>(
-                                  context,
-                                  listen: false,
-                                ).applyBeehiveBuff(
-                                  'isSunFlowerSeedChecked',
-                                  value!,
-                                );
-                              },
-                            ),
+                          DataRow(
+                            cells: <DataCell>[
+                              DataCell(
+                                Checkbox(
+                                  value: Provider.of<Calculator>(
+                                    context,
+                                  ).selectedFoodItems['isSunFlowerSeedChecked'],
+                                  onChanged: (value) {
+                                    Provider.of<Calculator>(
+                                      context,
+                                      listen: false,
+                                    ).selectFoodItem(
+                                      'isSunFlowerSeedChecked',
+                                      value!,
+                                    );
+                                  },
+                                ),
+                              ),
+                              DataCell(
+                                Checkbox(
+                                  value: Provider.of<Calculator>(
+                                    context,
+                                  ).beehiveBuffApplied['isSunFlowerSeedChecked'],
+                                  onChanged: (value) {
+                                    Provider.of<Calculator>(
+                                      context,
+                                      listen: false,
+                                    ).applyBeehiveBuff(
+                                      'isSunFlowerSeedChecked',
+                                      value!,
+                                    );
+                                  },
+                                ),
+                              ),
+                              DataCell(Text('Sunflower Seed')),
+                              DataCell(
+                                Text(
+                                  Provider.of<Calculator>(
+                                    context,
+                                  ).nrSunflowerTiles.toString(),
+                                ),
+                              ),
+                            ],
                           ),
-                          DataCell(Text('Sunflower Seed')),
-                          DataCell(
-                            Text(
-                              Provider.of<Calculator>(
-                                context,
-                              ).nrSunflowerTiles.toString(),
-                            ),
+                          DataRow(
+                            cells: <DataCell>[
+                              DataCell(
+                                Checkbox(
+                                  value: Provider.of<Calculator>(
+                                    context,
+                                  ).selectedFoodItems['isGrilledPotatoChecked'],
+                                  onChanged: (value) {
+                                    Provider.of<Calculator>(
+                                      context,
+                                      listen: false,
+                                    ).selectFoodItem(
+                                      'isGrilledPotatoChecked',
+                                      value!,
+                                    );
+                                  },
+                                ),
+                              ),
+                              DataCell(
+                                Checkbox(
+                                  value: Provider.of<Calculator>(
+                                    context,
+                                  ).beehiveBuffApplied['isGrilledPotatoChecked'],
+                                  onChanged: (value) {
+                                    Provider.of<Calculator>(
+                                      context,
+                                      listen: false,
+                                    ).applyBeehiveBuff(
+                                      'isGrilledPotatoChecked',
+                                      value!,
+                                    );
+                                  },
+                                ),
+                              ),
+                              DataCell(Text('Grilled Potato')),
+                              DataCell(
+                                Text(
+                                  Provider.of<Calculator>(
+                                    context,
+                                  ).nrPotatoTiles.toString(),
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                      DataRow(
-                        cells: <DataCell>[
-                          DataCell(
-                            Checkbox(
-                              value: Provider.of<Calculator>(
-                                context,
-                              ).selectedFoodItems['isGrilledPotatoChecked'],
-                              onChanged: (value) {
-                                Provider.of<Calculator>(
-                                  context,
-                                  listen: false,
-                                ).selectFoodItem('isGrilledPotatoChecked', value!);
-                              },
-                            ),
+                          DataRow(
+                            cells: <DataCell>[
+                              DataCell(
+                                Checkbox(
+                                  value: Provider.of<Calculator>(
+                                    context,
+                                  ).selectedFoodItems['isBreadChecked'],
+                                  onChanged: (value) {
+                                    Provider.of<Calculator>(
+                                      context,
+                                      listen: false,
+                                    ).selectFoodItem('isBreadChecked', value!);
+                                  },
+                                ),
+                              ),
+                              DataCell(
+                                Checkbox(
+                                  value: Provider.of<Calculator>(
+                                    context,
+                                  ).beehiveBuffApplied['isWheatForBreadChecked'],
+                                  onChanged: (value) {
+                                    Provider.of<Calculator>(
+                                      context,
+                                      listen: false,
+                                    ).applyBeehiveBuff(
+                                      'isWheatForBreadChecked',
+                                      value!,
+                                    );
+                                  },
+                                ),
+                              ),
+                              DataCell(Text('Bread (Wheat)')),
+                              DataCell(
+                                Text(
+                                  Provider.of<Calculator>(
+                                    context,
+                                  ).nrWheatTilesForBread.toString(),
+                                ),
+                              ),
+                            ],
                           ),
-                          DataCell(
-                            Checkbox(
-                              value: Provider.of<Calculator>(
-                                context,
-                              ).beehiveBuffApplied['isGrilledPotatoChecked'],
-                              onChanged: (value) {
-                                Provider.of<Calculator>(
-                                  context,
-                                  listen: false,
-                                ).applyBeehiveBuff(
-                                  'isGrilledPotatoChecked',
-                                  value!,
-                                );
-                              },
-                            ),
+                          DataRow(
+                            cells: <DataCell>[
+                              DataCell(
+                                Checkbox(
+                                  value: Provider.of<Calculator>(
+                                    context,
+                                  ).selectedFoodItems['isGrilledChestnutChecked'],
+                                  onChanged: (value) {
+                                    Provider.of<Calculator>(
+                                      context,
+                                      listen: false,
+                                    ).selectFoodItem(
+                                      'isGrilledChestnutChecked',
+                                      value!,
+                                    );
+                                  },
+                                ),
+                              ),
+                              DataCell(Text('')),
+                              DataCell(Text('Grilled Chestnut')),
+                              DataCell(
+                                Text(
+                                  Provider.of<Calculator>(
+                                    context,
+                                  ).nrChestnutTiles.toString(),
+                                ),
+                              ),
+                            ],
                           ),
-                          DataCell(Text('Grilled Potato')),
-                          DataCell(
-                            Text(
-                              Provider.of<Calculator>(
-                                context,
-                              ).nrPotatoTiles.toString(),
-                            ),
+                          DataRow(
+                            cells: <DataCell>[
+                              DataCell(
+                                Checkbox(
+                                  value: Provider.of<Calculator>(
+                                    context,
+                                  ).selectedFoodItems['isCattailCrackerChecked'],
+                                  onChanged: (value) {
+                                    Provider.of<Calculator>(
+                                      context,
+                                      listen: false,
+                                    ).selectFoodItem(
+                                      'isCattailCrackerChecked',
+                                      value!,
+                                    );
+                                  },
+                                ),
+                              ),
+                              DataCell(
+                                Checkbox(
+                                  value: Provider.of<Calculator>(
+                                    context,
+                                  ).beehiveBuffApplied['isCattailCrackerChecked'],
+                                  onChanged: (value) {
+                                    Provider.of<Calculator>(
+                                      context,
+                                      listen: false,
+                                    ).applyBeehiveBuff(
+                                      'isCattailCrackerChecked',
+                                      value!,
+                                    );
+                                  },
+                                ),
+                              ),
+                              DataCell(Text('Cattail Cracker')),
+                              DataCell(
+                                Text(
+                                  Provider.of<Calculator>(
+                                    context,
+                                  ).nrCattailTiles.toString(),
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                      DataRow(
-                        cells: <DataCell>[
-                          DataCell(
-                            Checkbox(
-                              value: Provider.of<Calculator>(
-                                context,
-                              ).selectedFoodItems['isBreadChecked'],
-                              onChanged: (value) {
-                                Provider.of<Calculator>(
-                                  context,
-                                  listen: false,
-                                ).selectFoodItem('isBreadChecked', value!);
-                              },
-                            ),
+                          DataRow(
+                            cells: <DataCell>[
+                              DataCell(
+                                Checkbox(
+                                  value: Provider.of<Calculator>(
+                                    context,
+                                  ).selectedFoodItems['isGrilledSpadderdockChecked'],
+                                  onChanged: (value) {
+                                    Provider.of<Calculator>(
+                                      context,
+                                      listen: false,
+                                    ).selectFoodItem(
+                                      'isGrilledSpadderdockChecked',
+                                      value!,
+                                    );
+                                  },
+                                ),
+                              ),
+                              DataCell(
+                                Checkbox(
+                                  value: Provider.of<Calculator>(
+                                    context,
+                                  ).beehiveBuffApplied['isGrilledSpadderdockChecked'],
+                                  onChanged: (value) {
+                                    Provider.of<Calculator>(
+                                      context,
+                                      listen: false,
+                                    ).applyBeehiveBuff(
+                                      'isGrilledSpadderdockChecked',
+                                      value!,
+                                    );
+                                  },
+                                ),
+                              ),
+                              DataCell(Text('Grilled Spadderdock')),
+                              DataCell(
+                                Text(
+                                  Provider.of<Calculator>(
+                                    context,
+                                  ).nrSpadderdockTiles.toString(),
+                                ),
+                              ),
+                            ],
                           ),
-                          DataCell(
-                            Checkbox(
-                              value: Provider.of<Calculator>(
-                                context,
-                              ).beehiveBuffApplied['isWheatForBreadChecked'],
-                              onChanged: (value) {
-                                Provider.of<Calculator>(
-                                  context,
-                                  listen: false,
-                                ).applyBeehiveBuff(
-                                  'isWheatForBreadChecked',
-                                  value!,
-                                );
-                              },
-                            ),
+                          DataRow(
+                            cells: <DataCell>[
+                              DataCell(
+                                Checkbox(
+                                  value: Provider.of<Calculator>(
+                                    context,
+                                  ).selectedFoodItems['isPastryChecked'],
+                                  onChanged: (value) {
+                                    Provider.of<Calculator>(
+                                      context,
+                                      listen: false,
+                                    ).selectFoodItem('isPastryChecked', value!);
+                                  },
+                                ),
+                              ),
+                              DataCell(Text('')),
+                              DataCell(Text('Pastry')),
+                              DataCell(Text('')),
+                            ],
                           ),
-                          DataCell(Text('Bread (Wheat)')),
-                          DataCell(
-                            Text(
-                              Provider.of<Calculator>(
-                                context,
-                              ).nrWheatTilesForBread.toString(),
-                            ),
+                          DataRow(
+                            cells: <DataCell>[
+                              DataCell(Text('')),
+                              DataCell(
+                                Checkbox(
+                                  value: Provider.of<Calculator>(
+                                    context,
+                                  ).beehiveBuffApplied['isWheatForPastryChecked'],
+                                  onChanged: (value) {
+                                    Provider.of<Calculator>(
+                                      context,
+                                      listen: false,
+                                    ).applyBeehiveBuff(
+                                      'isWheatForPastryChecked',
+                                      value!,
+                                    );
+                                  },
+                                ),
+                              ),
+                              DataCell(Text('Wheat')),
+                              DataCell(
+                                Text(
+                                  Provider.of<Calculator>(
+                                    context,
+                                  ).nrWheatTilesForPastry.toString(),
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                      DataRow(
-                        cells: <DataCell>[
-                          DataCell(
-                            Checkbox(
-                              value: Provider.of<Calculator>(
-                                context,
-                              ).selectedFoodItems['isGrilledChestnutChecked'],
-                              onChanged: (value) {
-                                Provider.of<Calculator>(
-                                  context,
-                                  listen: false,
-                                ).selectFoodItem(
-                                  'isGrilledChestnutChecked',
-                                  value!,
-                                );
-                              },
-                            ),
-                          ),
-                          DataCell(Text('')),
-                          DataCell(Text('Grilled Chestnut')),
-                          DataCell(
-                            Text(
-                              Provider.of<Calculator>(
-                                context,
-                              ).nrChestnutTiles.toString(),
-                            ),
-                          ),
-                        ],
-                      ),
-                      DataRow(
-                        cells: <DataCell>[
-                          DataCell(
-                            Checkbox(
-                              value: Provider.of<Calculator>(
-                                context,
-                              ).selectedFoodItems['isCattailCrackerChecked'],
-                              onChanged: (value) {
-                                Provider.of<Calculator>(
-                                  context,
-                                  listen: false,
-                                ).selectFoodItem('isCattailCrackerChecked', value!);
-                              },
-                            ),
-                          ),
-                          DataCell(
-                            Checkbox(
-                              value: Provider.of<Calculator>(
-                                context,
-                              ).beehiveBuffApplied['isCattailCrackerChecked'],
-                              onChanged: (value) {
-                                Provider.of<Calculator>(
-                                  context,
-                                  listen: false,
-                                ).applyBeehiveBuff(
-                                  'isCattailCrackerChecked',
-                                  value!,
-                                );
-                              },
-                            ),
-                          ),
-                          DataCell(Text('Cattail Cracker')),
-                          DataCell(
-                            Text(
-                              Provider.of<Calculator>(
-                                context,
-                              ).nrCattailTiles.toString(),
-                            ),
-                          ),
-                        ],
-                      ),
-                      DataRow(
-                        cells: <DataCell>[
-                          DataCell(
-                            Checkbox(
-                              value: Provider.of<Calculator>(
-                                context,
-                              ).selectedFoodItems['isGrilledSpadderdockChecked'],
-                              onChanged: (value) {
-                                Provider.of<Calculator>(
-                                  context,
-                                  listen: false,
-                                ).selectFoodItem(
-                                  'isGrilledSpadderdockChecked',
-                                  value!,
-                                );
-                              },
-                            ),
-                          ),
-                          DataCell(
-                            Checkbox(
-                              value: Provider.of<Calculator>(
-                                context,
-                              ).beehiveBuffApplied['isGrilledSpadderdockChecked'],
-                              onChanged: (value) {
-                                Provider.of<Calculator>(
-                                  context,
-                                  listen: false,
-                                ).applyBeehiveBuff(
-                                  'isGrilledSpadderdockChecked',
-                                  value!,
-                                );
-                              },
-                            ),
-                          ),
-                          DataCell(Text('Grilled Spadderdock')),
-                          DataCell(
-                            Text(
-                              Provider.of<Calculator>(
-                                context,
-                              ).nrSpadderdockTiles.toString(),
-                            ),
-                          ),
-                        ],
-                      ),
-                      DataRow(
-                        cells: <DataCell>[
-                          DataCell(
-                            Checkbox(
-                              value: Provider.of<Calculator>(
-                                context,
-                              ).selectedFoodItems['isPastryChecked'],
-                              onChanged: (value) {
-                                Provider.of<Calculator>(
-                                  context,
-                                  listen: false,
-                                ).selectFoodItem('isPastryChecked', value!);
-                              },
-                            ),
-                          ),
-                          DataCell(Text('')),
-                          DataCell(Text('Pastry')),
-                          DataCell(Text('')),
-                        ],
-                      ),
-                      DataRow(
-                        cells: <DataCell>[
-                          DataCell(Text('')),
-                          DataCell(
-                            Checkbox(
-                              value: Provider.of<Calculator>(
-                                context,
-                              ).beehiveBuffApplied['isWheatForPastryChecked'],
-                              onChanged: (value) {
-                                Provider.of<Calculator>(
-                                  context,
-                                  listen: false,
-                                ).applyBeehiveBuff(
-                                  'isWheatForPastryChecked',
-                                  value!,
-                                );
-                              },
-                            ),
-                          ),
-                          DataCell(Text('Wheat')),
-                          DataCell(
-                            Text(
-                              Provider.of<Calculator>(
-                                context,
-                              ).nrWheatTilesForPastry.toString(),
-                            ),
-                          ),
-                        ],
-                      ),
-                      DataRow(
-                        cells: <DataCell>[
-                          DataCell(Text('')),
-                          DataCell(Text('')),
-                          DataCell(Text('Maple')),
-                          DataCell(
-                            Text(
-                              Provider.of<Calculator>(
-                                context,
-                              ).nrMapleTilesForPastry.toString(),
-                            ),
+                          DataRow(
+                            cells: <DataCell>[
+                              DataCell(Text('')),
+                              DataCell(Text('')),
+                              DataCell(Text('Maple')),
+                              DataCell(
+                                Text(
+                                  Provider.of<Calculator>(
+                                    context,
+                                  ).nrMapleTilesForPastry.toString(),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
