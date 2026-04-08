@@ -25,7 +25,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Timberborn Calculator')),
+      appBar: AppBar(title: const Text('Timberborn Assistant')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
@@ -99,6 +99,7 @@ class HomePage extends StatelessWidget {
               DataTable(
                 columns: <DataColumn>[
                   DataColumn(label: Text('Selected')),
+                  DataColumn(label: Text('Beehive')),
                   DataColumn(label: Text('Food Item')),
                   DataColumn(label: Text('Tiles')),
                 ],
@@ -109,12 +110,25 @@ class HomePage extends StatelessWidget {
                         Checkbox(
                           value: Provider.of<Calculator>(
                             context,
-                          ).checkedFoodItems['isCarrotChecked'],
+                          ).selectedFoodItems['isCarrotChecked'],
                           onChanged: (value) {
                             Provider.of<Calculator>(
                               context,
                               listen: false,
                             ).selectFoodItem('isCarrotChecked', value!);
+                          },
+                        ),
+                      ),
+                      DataCell(
+                        Checkbox(
+                          value: Provider.of<Calculator>(
+                            context,
+                          ).beehiveBuffApplied['isCarrotChecked'],
+                          onChanged: (value) {
+                            Provider.of<Calculator>(
+                              context,
+                              listen: false,
+                            ).applyBeehiveBuff('isCarrotChecked', value!);
                           },
                         ),
                       ),
@@ -134,12 +148,28 @@ class HomePage extends StatelessWidget {
                         Checkbox(
                           value: Provider.of<Calculator>(
                             context,
-                          ).checkedFoodItems['isSunFlowerSeedChecked'],
+                          ).selectedFoodItems['isSunFlowerSeedChecked'],
                           onChanged: (value) {
                             Provider.of<Calculator>(
                               context,
                               listen: false,
                             ).selectFoodItem('isSunFlowerSeedChecked', value!);
+                          },
+                        ),
+                      ),
+                      DataCell(
+                        Checkbox(
+                          value: Provider.of<Calculator>(
+                            context,
+                          ).beehiveBuffApplied['isSunFlowerSeedChecked'],
+                          onChanged: (value) {
+                            Provider.of<Calculator>(
+                              context,
+                              listen: false,
+                            ).applyBeehiveBuff(
+                              'isSunFlowerSeedChecked',
+                              value!,
+                            );
                           },
                         ),
                       ),
@@ -159,12 +189,28 @@ class HomePage extends StatelessWidget {
                         Checkbox(
                           value: Provider.of<Calculator>(
                             context,
-                          ).checkedFoodItems['isGrilledPotatoChecked'],
+                          ).selectedFoodItems['isGrilledPotatoChecked'],
                           onChanged: (value) {
                             Provider.of<Calculator>(
                               context,
                               listen: false,
                             ).selectFoodItem('isGrilledPotatoChecked', value!);
+                          },
+                        ),
+                      ),
+                      DataCell(
+                        Checkbox(
+                          value: Provider.of<Calculator>(
+                            context,
+                          ).beehiveBuffApplied['isGrilledPotatoChecked'],
+                          onChanged: (value) {
+                            Provider.of<Calculator>(
+                              context,
+                              listen: false,
+                            ).applyBeehiveBuff(
+                              'isGrilledPotatoChecked',
+                              value!,
+                            );
                           },
                         ),
                       ),
@@ -184,12 +230,28 @@ class HomePage extends StatelessWidget {
                         Checkbox(
                           value: Provider.of<Calculator>(
                             context,
-                          ).checkedFoodItems['isBreadChecked'],
+                          ).selectedFoodItems['isBreadChecked'],
                           onChanged: (value) {
                             Provider.of<Calculator>(
                               context,
                               listen: false,
                             ).selectFoodItem('isBreadChecked', value!);
+                          },
+                        ),
+                      ),
+                      DataCell(
+                        Checkbox(
+                          value: Provider.of<Calculator>(
+                            context,
+                          ).beehiveBuffApplied['isWheatForBreadChecked'],
+                          onChanged: (value) {
+                            Provider.of<Calculator>(
+                              context,
+                              listen: false,
+                            ).applyBeehiveBuff(
+                              'isWheatForBreadChecked',
+                              value!,
+                            );
                           },
                         ),
                       ),
@@ -209,7 +271,7 @@ class HomePage extends StatelessWidget {
                         Checkbox(
                           value: Provider.of<Calculator>(
                             context,
-                          ).checkedFoodItems['isGrilledChestnutChecked'],
+                          ).selectedFoodItems['isGrilledChestnutChecked'],
                           onChanged: (value) {
                             Provider.of<Calculator>(
                               context,
@@ -221,6 +283,7 @@ class HomePage extends StatelessWidget {
                           },
                         ),
                       ),
+                      DataCell(Text('')),
                       DataCell(Text('Grilled Chestnut')),
                       DataCell(
                         Text(
@@ -237,12 +300,28 @@ class HomePage extends StatelessWidget {
                         Checkbox(
                           value: Provider.of<Calculator>(
                             context,
-                          ).checkedFoodItems['isCattailCrackerChecked'],
+                          ).selectedFoodItems['isCattailCrackerChecked'],
                           onChanged: (value) {
                             Provider.of<Calculator>(
                               context,
                               listen: false,
                             ).selectFoodItem('isCattailCrackerChecked', value!);
+                          },
+                        ),
+                      ),
+                      DataCell(
+                        Checkbox(
+                          value: Provider.of<Calculator>(
+                            context,
+                          ).beehiveBuffApplied['isCattailCrackerChecked'],
+                          onChanged: (value) {
+                            Provider.of<Calculator>(
+                              context,
+                              listen: false,
+                            ).applyBeehiveBuff(
+                              'isCattailCrackerChecked',
+                              value!,
+                            );
                           },
                         ),
                       ),
@@ -262,12 +341,28 @@ class HomePage extends StatelessWidget {
                         Checkbox(
                           value: Provider.of<Calculator>(
                             context,
-                          ).checkedFoodItems['isGrilledSpadderdockChecked'],
+                          ).selectedFoodItems['isGrilledSpadderdockChecked'],
                           onChanged: (value) {
                             Provider.of<Calculator>(
                               context,
                               listen: false,
                             ).selectFoodItem(
+                              'isGrilledSpadderdockChecked',
+                              value!,
+                            );
+                          },
+                        ),
+                      ),
+                      DataCell(
+                        Checkbox(
+                          value: Provider.of<Calculator>(
+                            context,
+                          ).beehiveBuffApplied['isGrilledSpadderdockChecked'],
+                          onChanged: (value) {
+                            Provider.of<Calculator>(
+                              context,
+                              listen: false,
+                            ).applyBeehiveBuff(
                               'isGrilledSpadderdockChecked',
                               value!,
                             );
@@ -290,7 +385,7 @@ class HomePage extends StatelessWidget {
                         Checkbox(
                           value: Provider.of<Calculator>(
                             context,
-                          ).checkedFoodItems['isPastryChecked'],
+                          ).selectedFoodItems['isPastryChecked'],
                           onChanged: (value) {
                             Provider.of<Calculator>(
                               context,
@@ -299,6 +394,7 @@ class HomePage extends StatelessWidget {
                           },
                         ),
                       ),
+                      DataCell(Text('')),
                       DataCell(Text('Pastry')),
                       DataCell(Text('')),
                     ],
@@ -306,6 +402,22 @@ class HomePage extends StatelessWidget {
                   DataRow(
                     cells: <DataCell>[
                       DataCell(Text('')),
+                      DataCell(
+                        Checkbox(
+                          value: Provider.of<Calculator>(
+                            context,
+                          ).beehiveBuffApplied['isWheatForPastryChecked'],
+                          onChanged: (value) {
+                            Provider.of<Calculator>(
+                              context,
+                              listen: false,
+                            ).applyBeehiveBuff(
+                              'isWheatForPastryChecked',
+                              value!,
+                            );
+                          },
+                        ),
+                      ),
                       DataCell(Text('Wheat')),
                       DataCell(
                         Text(
@@ -318,6 +430,7 @@ class HomePage extends StatelessWidget {
                   ),
                   DataRow(
                     cells: <DataCell>[
+                      DataCell(Text('')),
                       DataCell(Text('')),
                       DataCell(Text('Maple')),
                       DataCell(
