@@ -1,29 +1,18 @@
 import 'package:flutter/material.dart';
 
+enum Faction { folkTails, ironTeeth }
+
 class Calculator extends ChangeNotifier {
+  Faction _faction = Faction.folkTails;
   int _population = 0;
   int _workingHours = 16;
 
-  Map<String, bool> selectedFoodItems = {
-    'isCarrotChecked': false,
-    'isSunFlowerSeedChecked': false,
-    'isGrilledPotatoChecked': false,
-    'isBreadChecked': false,
-    'isGrilledChestnutChecked': false,
-    'isCattailCrackerChecked': false,
-    'isGrilledSpadderdockChecked': false,
-    'isPastryChecked': false,
-  };
+  Faction get faction => _faction;
 
-  Map<String, bool> beehiveBuffApplied = {
-    'isCarrotChecked': false,
-    'isSunFlowerSeedChecked': false,
-    'isGrilledPotatoChecked': false,
-    'isWheatForBreadChecked': false,
-    'isCattailCrackerChecked': false,
-    'isGrilledSpadderdockChecked': false,
-    'isWheatForPastryChecked': false,
-  };
+  void setFaction(Faction faction) {
+    _faction = faction;
+    notifyListeners();
+  }
 
   void setPopulation(int value) {
     _population = value;
@@ -50,73 +39,223 @@ class Calculator extends ChangeNotifier {
   double get waterConsumption => (_population * 2.13);
 
   double get nrOfWaterPumps => (waterConsumption / _workingHours / 3);
+
+  // ###########################################################################
+  // FOLKTAILS
+  // ###########################################################################
+
+  Map<String, bool> selectedFoodItems = {
+    'isCarrotChecked': false,
+    'isSunFlowerSeedChecked': false,
+    'isGrilledPotatoChecked': false,
+    'isBreadChecked': false,
+    'isGrilledChestnutChecked': false,
+    'isCattailCrackerChecked': false,
+    'isGrilledSpadderdockChecked': false,
+    'isPastryChecked': false,
+  };
+
+  Map<String, bool> beehiveBuffApplied = {
+    'isCarrotChecked': false,
+    'isSunFlowerSeedChecked': false,
+    'isGrilledPotatoChecked': false,
+    'isWheatForBreadChecked': false,
+    'isCattailCrackerChecked': false,
+    'isGrilledSpadderdockChecked': false,
+    'isWheatForPastryChecked': false,
+  };
+
   double get nrOfLargeWaterPumps => (waterConsumption / _workingHours / 15);
 
   int get nrOfSelectedFoodItems =>
       selectedFoodItems.values.where((value) => value == true).length;
 
-  double get nrCarrotTiles => selectedFoodItems['isCarrotChecked']!
-      ? (foodConsumption /
-            3 *
-            4 *
-            (beehiveBuffApplied['isCarrotChecked']! ? 0.75 : 1) /
-            nrOfSelectedFoodItems)
-      : 0;
+  int get nrCarrotTiles => calculateNrOfTilesFolktails(
+    isSelected: selectedFoodItems['isCarrotChecked']!,
+    yield: 3,
+    days: 4,
+    isBeehiveBuffApplied: beehiveBuffApplied['isCarrotChecked']!,
+  );
 
-  double get nrSunflowerTiles => selectedFoodItems['isSunFlowerSeedChecked']!
-      ? (foodConsumption /
-            2 *
-            5 *
-            (beehiveBuffApplied['isSunFlowerSeedChecked']! ? 0.75 : 1) /
-            nrOfSelectedFoodItems)
-      : 0;
+  int get nrSunflowerTiles => calculateNrOfTilesFolktails(
+    isSelected: selectedFoodItems['isSunFlowerSeedChecked']!,
+    yield: 2,
+    days: 5,
+    isBeehiveBuffApplied: beehiveBuffApplied['isSunFlowerSeedChecked']!,
+  );
 
-  double get nrPotatoTiles => selectedFoodItems['isGrilledPotatoChecked']!
-      ? (foodConsumption /
-            1 *
-            1.5 *
-            (beehiveBuffApplied['isGrilledPotatoChecked']! ? 0.75 : 1) /
-            nrOfSelectedFoodItems)
-      : 0;
+  int get nrPotatoTiles => calculateNrOfTilesFolktails(
+    isSelected: selectedFoodItems['isGrilledPotatoChecked']!,
+    yield: 4,
+    days: 6,
+    isBeehiveBuffApplied: beehiveBuffApplied['isGrilledPotatoChecked']!,
+  );
 
-  double get nrWheatTilesForBread => selectedFoodItems['isBreadChecked']!
-      ? (foodConsumption /
-            15 *
-            10 *
-            (beehiveBuffApplied['isWheatForBreadChecked']! ? 0.75 : 1) /
-            nrOfSelectedFoodItems)
-      : 0;
+  int get nrWheatTilesForBread => calculateNrOfTilesFolktails(
+      isSelected: selectedFoodItems['isBreadChecked']!,
+      yield: 15,
+      days: 10,
+      isBeehiveBuffApplied: beehiveBuffApplied['isWheatForBreadChecked']!,
+  );
 
-  double get nrChestnutTiles => selectedFoodItems['isGrilledChestnutChecked']!
-      ? (foodConsumption / 0.75 / nrOfSelectedFoodItems)
-      : 0;
+  // Chestnut trees can not be buffed by beehives
+  int get nrChestnutTiles => calculateNrOfTilesFolktails(
+    isSelected: selectedFoodItems['isGrilledChestnutChecked']!,
+    yield: 3,
+    days: 4,
+    isBeehiveBuffApplied: false,
+  );
 
-  double get nrCattailTiles => selectedFoodItems['isCattailCrackerChecked']!
-      ? (foodConsumption /
-            12 *
-            8 *
-            (beehiveBuffApplied['isCattailCrackerChecked']! ? 0.75 : 1) /
-            nrOfSelectedFoodItems)
-      : 0;
+  int get nrCattailTiles => calculateNrOfTilesFolktails(
+    isSelected: selectedFoodItems['isCattailCrackerChecked']!,
+    yield: 12,
+    days: 8,
+    isBeehiveBuffApplied: beehiveBuffApplied['isCattailCrackerChecked']!,
+  );
 
-  double get nrSpadderdockTiles =>
-      selectedFoodItems['isGrilledSpadderdockChecked']!
-      ? (foodConsumption /
-            9 *
-            12 *
-            (beehiveBuffApplied['isGrilledSpadderdockChecked']! ? 0.75 : 1) /
-            nrOfSelectedFoodItems)
-      : 0;
+  int get nrSpadderdockTiles => calculateNrOfTilesFolktails(
+    isSelected: selectedFoodItems['isGrilledSpadderdockChecked']!,
+    yield: 9,
+    days: 12,
+    isBeehiveBuffApplied: beehiveBuffApplied['isGrilledSpadderdockChecked']!,
+  );
 
-  double get nrWheatTilesForPastry => selectedFoodItems['isPastryChecked']!
-      ? (foodConsumption /
-            9 *
-            10 *
-            (beehiveBuffApplied['isWheatForPastryChecked']! ? 0.75 : 1) /
-            nrOfSelectedFoodItems)
-      : 0;
+  int get nrWheatTilesForPastry => calculateNrOfTilesFolktails(
+    isSelected: selectedFoodItems['isPastryChecked']!,
+    yield: 9,
+    days: 10,
+    isBeehiveBuffApplied: beehiveBuffApplied['isWheatForPastryChecked']!,
+  );
 
-  double get nrMapleTilesForPastry => selectedFoodItems['isPastryChecked']!
-      ? (foodConsumption / 0.75 / nrOfSelectedFoodItems)
-      : 0;
+  // Maple trees can not be buffed by beehives
+  int get nrMapleTilesForPastry => calculateNrOfTilesFolktails(
+    isSelected: selectedFoodItems['isPastryChecked']!,
+    yield: 3,
+    days: 4,
+    isBeehiveBuffApplied: false,
+  );
+
+  int calculateNrOfTilesFolktails({
+    required bool isSelected,
+    required int yield,
+    required int days,
+    required bool isBeehiveBuffApplied,
+  }) {
+    if (!isSelected) {
+      return 0;
+    } else {
+      return (foodConsumption /
+              yield *
+              days *
+              (isBeehiveBuffApplied ? 0.75 : 1) /
+              nrOfSelectedFoodItems)
+          .ceil();
+    }
+  }
+
+  // ###########################################################################
+  // IRONTEETH
+  // ###########################################################################
+
+  Map<String, bool> selectedFoodItemsIronteeth = {
+    'isKohlrabiSelected': false,
+    'isFermentedCassavaSelected': false,
+    'isFermentedSoybeanSelected': false,
+    'isCornRationSelected': false,
+    'isEggplantRationSelected': false,
+    'isMangroveFruitSelected': false,
+    'isAlgaeRationSelected': false,
+    'isFermentedMushroomSelected': false,
+    'isCoffeeSelected': false,
+  };
+
+  int get nrOfSelectedFoodItemsIronteeth =>
+      selectedFoodItemsIronteeth.values.where((value) => value == true).length;
+
+  void selectFoodItemIronteeth(String key, bool value) {
+    selectedFoodItemsIronteeth[key] = value;
+    notifyListeners();
+  }
+
+  int get nrKohlrabiTiles => calculateNrOfTilesIronteeth(
+    isSelected: selectedFoodItemsIronteeth['isKohlrabiSelected']!,
+    yield: 2,
+    days: 3,
+  );
+
+  int get nrCassavaTiles => calculateNrOfTilesIronteeth(
+    isSelected: selectedFoodItemsIronteeth['isFermentedCassavaSelected']!,
+    yield: 2.5,
+    days: 5,
+  );
+
+  int get nrSoybeanTiles => calculateNrOfTilesIronteeth(
+    isSelected: selectedFoodItemsIronteeth['isFermentedSoybeanSelected']!,
+    yield: 6.67,
+    days: 8,
+  );
+
+  int get nrMushroomHydroponicGardens => calculateNrOfTilesIronteeth(
+    isSelected: selectedFoodItemsIronteeth['isFermentedMushroomSelected']!,
+    yield: 180,
+    days: 8,
+  );
+
+  int get nrCanolaTilesForFermentedSoybeans => calculateNrOfTilesIronteeth(
+    isSelected: selectedFoodItemsIronteeth['isFermentedSoybeanSelected']!,
+    yield: 60,
+    days: 9,
+  );
+
+  int get nrCornTiles => calculateNrOfTilesIronteeth(
+    isSelected: selectedFoodItemsIronteeth['isCornRationSelected']!,
+    yield: 10,
+    days: 10,
+  );
+
+  int get nrEggplantTiles => calculateNrOfTilesIronteeth(
+    isSelected: selectedFoodItemsIronteeth['isEggplantRationSelected']!,
+    yield: 18,
+    days: 12,
+  );
+
+  int get nrCanolaTilesForEggplantRations => calculateNrOfTilesIronteeth(
+    isSelected: selectedFoodItemsIronteeth['isEggplantRationSelected']!,
+    yield: 18,
+    days: 9,
+  );
+
+  int get nrMangroveTiles => calculateNrOfTilesIronteeth(
+    isSelected: selectedFoodItemsIronteeth['isMangroveFruitSelected']!,
+    yield: 4,
+    days: 10,
+  );
+
+  int get nrAlgaeHydroponicGardens => calculateNrOfTilesIronteeth(
+    isSelected: selectedFoodItemsIronteeth['isAlgaeRationSelected']!,
+    yield: 420,
+    days: 12,
+  );
+
+  int get nrCanolaTilesForAlgaeRations => calculateNrOfTilesIronteeth(
+    isSelected: selectedFoodItemsIronteeth['isAlgaeRationSelected']!,
+    yield: 18,
+    days: 9,
+  );
+
+  int calculateNrOfTilesIronteeth({
+    required bool isSelected,
+    required double yield,
+    required int days,
+  }) {
+    if (!isSelected) {
+      return 0;
+    } else {
+      return (foodConsumption /
+          yield *
+          days /
+          nrOfSelectedFoodItemsIronteeth)
+          .ceil();
+    }
+  }
 }
